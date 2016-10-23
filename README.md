@@ -1,2 +1,2 @@
-# chrome-with-node-extension
-Chrome extension that can communicate with Node.js server.
+# PaperTrail
+Keeps track of the user's digital footprint on the Internet.
