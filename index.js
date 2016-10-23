@@ -243,7 +243,7 @@ app.get("/smsReply", function(req, res){
 		
 	}
 	else if (body.indexOf("passive") != -1){
-		google("Vedant" + " " + "Mehta", function (err, next, links){
+		google("Rishi" + " " + "Masand", function (err, next, links){
 			if (err) console.error(err);
 			var resultLinks = next.links;
 			for (var q = 0; q < resultLinks.length; q++){
@@ -251,12 +251,42 @@ app.get("/smsReply", function(req, res){
 				console.log(resultLinks[q].description.toLowerCase());
 				for (var y = 0; y < goodWords.length; y++){
 					if (resultLinks[q].description.toLowerCase().indexOf(goodWords[y]) != -1){
-						footprintRating += 10;
+						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		  "medium": "balance",
+		  "transaction_date": "2016-08-07",
+		  "amount": 10,
+		  "status": "pending",
+		  "description": "string"
+		}}, function(err, res, body){
+			footprintRating += 10;
+			client.sendSms({
+				to: '+17327427351',
+				from: '+17324918329',
+				body: "Digital Footprint Karma: " + footprintRating
+			}, function (err, data) {
+			console.log(err);
+			});
+		});
 					}
 				}
 				for (var y = 0; y < badWords.length; y++){
 					if (resultLinks[q].description.toLowerCase().indexOf(badWords[y]) != -1){
-						footprintRating -= 10;
+						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		  "medium": "balance",
+		  "transaction_date": "2016-08-07",
+		  "amount": 10,
+		  "status": "pending",
+		  "description": "string"
+		}}, function(err, res, body){
+			footprintRating -= 10;
+			client.sendSms({
+				to: '+17327427351',
+				from: '+17324918329',
+				body: "Digital Footprint Karma: " + footprintRating
+			}, function (err, data) {
+			console.log(err);
+			});
+		});
 					}
 				}
 			}
