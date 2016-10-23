@@ -29,6 +29,14 @@ app.get("/", function(req, res){
 app.get("/smsReply", function(req, res){
 	var body = req.query.Body.toLowerCase();
 	if (body.indexOf("get footprint for last ") != -1){
+
+		var selectFootprint = undefined;
+
+		if (body.split("get footprint for last ")[0].length > 2){
+			selectFootprint = body.split("get footprint for last ")[0].toLowerCase();
+			selectFootprint.substring(0, selectFootprint.length - 1);
+		}
+		
 		var timeSpan = body.split("get footprint for last ")[1];
 		var numTime = timeSpan.split(" ")[0];
 		var units = timeSpan.split(" ")[1];
@@ -65,23 +73,72 @@ app.get("/smsReply", function(req, res){
 					w.push(docs[i].website);
 				}
 			}
-			client.sendSms({
-				to: req.query.From,
-				from: '+17324918329',
-				body: "Footprint for " + timeSpan + ": " + "\nFirst Name: " + fC + ", " + "\nLast Name: " + lC + ", " + "\nEmail Adress: " + eC + ", "
-			}, function (err, data) {
-				console.log(err);
+			if (selectFootprint){
+				if (selectFootprint.indexOf("first name") != -1){
+					client.sendSms({
+						to: req.query.From,
+						from: '+17324918329',
+						body: "Footprint for " + timeSpan + ": " + "\nFirst Name: " + fC
+					}, function (err, data) {
+					console.log(err);
+					});
+				}
+				else if (selectFootprint.indexOf("last name") != -1) {
+					client.sendSms({
+						to: req.query.From,
+						from: '+17324918329',
+						body: "Footprint for " + timeSpan + ": " + "\nLast Name: " + lC
+					}, function (err, data) {
+					console.log(err);
+					});
+				}
+				else if (selectFootprint.indexOf("email address") != -1) {
+					client.sendSms({
+						to: req.query.From,
+						from: '+17324918329',
+						body: "Footprint for " + timeSpan + ": " + "\nEmail Address: " + eC
+					}, function (err, data) {
+					console.log(err);
+					});
+				}
+				else if (selectFootprint.indexOf("home address") != -1) {
+					client.sendSms({
+						to: req.query.From,
+						from: '+17324918329',
+						body: "Footprint for " + timeSpan + ": " + "\nHome Address: " + aC
+					}, function (err, data) {
+					console.log(err);
+					});
+				}
+				else if (selectFootprint.indexOf("phone number") != -1) {
+					client.sendSms({
+						to: req.query.From,
+						from: '+17324918329',
+						body: "Footprint for " + timeSpan + ": " + "\nPhone Number: " + nC
+					}, function (err, data) {
+					console.log(err);
+					});
+				}
+			}
+			else {
 				client.sendSms({
 					to: req.query.From,
 					from: '+17324918329',
-					body: "Home Address: " + aC + ", " + "\nPhone Number: " + nC + ", " + "\nWebsites: " + w.filter(function(item, pos) { return w.indexOf(item) == pos;})
+					body: "Footprint for " + timeSpan + ": " + "\nFirst Name: " + fC + ", " + "\nLast Name: " + lC + ", " + "\nEmail Address: " + eC + ", "
 				}, function (err, data) {
 					console.log(err);
-				});
-			});
-			console.log("Footprint for " + timeSpan + ": " + fC + ", " + lC + ", " + eC + ", " + aC + ", " + nC + ", " + w.filter(function(item, pos) { return w.indexOf(item) == pos;}));
+					client.sendSms({
+							to: req.query.From,
+							from: '+17324918329',
+							body: "Home Address: " + aC + ", " + "\nPhone Number: " + nC + ", " + "\nWebsites: " + w.filter(function(item, pos) { return w.indexOf(item) == pos;})
+						}, function (err, data) {
+							console.log(err);
+						});
+					});
+				console.log("Footprint for " + timeSpan + ": " + fC + ", " + lC + ", " + eC + ", " + aC + ", " + nC + ", " + w.filter(function(item, pos) { return w.indexOf(item) == pos;}));
+			}
 		});
-
+		
 	}
 });
 
