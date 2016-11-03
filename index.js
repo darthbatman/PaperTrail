@@ -9,7 +9,7 @@ var Twit = require('twit');
 var config = require('./config.js');
 var request = require('request');
 
-var client = new twilio.RestClient('AC1855c5ea38c7b8de45e1ce3d85e2caf7','acd884dff899531302bdbd4767b9300e');
+var client = new twilio.RestClient(config.twilio.token, config.twilio.secret);
 
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -36,7 +36,7 @@ app.get("/", function(req, res){
 	});
 	if (parseInt(req.query.url.split(" ")[3]) > 0){
 		
-		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -55,7 +55,7 @@ app.get("/", function(req, res){
   			
 	}
 	if (parseInt(req.query.url.split(" ")[4]) > 0){
-		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -73,7 +73,7 @@ app.get("/", function(req, res){
 		});
 	}
 	if (req.query.url.split(" ")[5].indexOf("github") != -1){
-		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -91,7 +91,7 @@ app.get("/", function(req, res){
 		});
 	}
 	else if (req.query.url.split(" ")[5].indexOf("devpost") != -1) {
-		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -109,7 +109,7 @@ app.get("/", function(req, res){
 		});
 	}
 	else if (req.query.url.split(" ")[5].indexOf("linkedin") != -1) {
-		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+		request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -251,7 +251,7 @@ app.get("/smsReply", function(req, res){
 				console.log(resultLinks[q].description.toLowerCase());
 				for (var y = 0; y < goodWords.length; y++){
 					if (resultLinks[q].description.toLowerCase().indexOf(goodWords[y]) != -1){
-						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/deposits?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -260,7 +260,7 @@ app.get("/smsReply", function(req, res){
 		}}, function(err, res, body){
 			footprintRating += 10;
 			client.sendSms({
-				to: '+17327427351',
+				to: config.phoneNumber,
 				from: '+17324918329',
 				body: "Digital Footprint Karma: " + footprintRating
 			}, function (err, data) {
@@ -271,7 +271,7 @@ app.get("/smsReply", function(req, res){
 				}
 				for (var y = 0; y < badWords.length; y++){
 					if (resultLinks[q].description.toLowerCase().indexOf(badWords[y]) != -1){
-						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=f22e0b663e5763bc27e5a5b03f49999b", method: 'POST', json: {
+						request({ url: "http://api.reimaginebanking.com/accounts/580cad27360f81f10454505c/withdrawals?key=" + config.capitalOne.key, method: 'POST', json: {
 		  "medium": "balance",
 		  "transaction_date": "2016-08-07",
 		  "amount": 10,
@@ -280,7 +280,7 @@ app.get("/smsReply", function(req, res){
 		}}, function(err, res, body){
 			footprintRating -= 10;
 			client.sendSms({
-				to: '+17327427351',
+				to: config.phoneNumber,
 				from: '+17324918329',
 				body: "Digital Footprint Karma: " + footprintRating
 			}, function (err, data) {
